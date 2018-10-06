@@ -1,0 +1,286 @@
+#软件工程过程作业
+
+##[学院信息管理系统](https://github.com/2556349561/-/blob/master/1714010205-%E9%82%93%E9%B9%8F%E9%A3%9E-C%E8%AF%AD%E8%A8%80%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5%E4%BB%A3%E7%A0%81)
+
+###一·需求分析
+  经过对程序设计题目的分析可知，整个程序的设计实现大致分为七个模块，每一个模块对应一个函数。在这些函数当中，添加学院数据函数，显示学院数据函数，查询学院信息函数，删除学院数据函数，修改学院信息函数的实现严格按照题目的要求。读取文件函数和保存信息函数对其它函数的实现起辅助作用，主函数及菜单函数控制程序的整体运行。
+  
+###二·系统设计
+
+####1.用户登录模块。
+
+####2.输入数据模块。
+
+####3.显示数据模块。
+
+####4.添加数据模块。
+
+####5.删除数据模块。
+
+####6.查询数据模块。
+
+####7.修改数据模块。
+
+####8.退出系统模块。
+
+###三.核心算法
+
+####1.添加函数：主要实现程序最初运行时学院数据的录入以及其后的运行中学院数据的追加功能。
+
+void regist()
+{
+char ch;
+school *s,*ptr;  //s用来建新结点，ptr用来暂存头结点
+do
+{
+    s=(school*)malloc(sizeof(school)); // 新建一个学院结点
+printf("\n开始注册...");            //开始注册
+    printf("\n请输入该学院的学院号:");
+    scanf("%s",s->sno);
+    printf("\n请输入该学院的名称:");
+    scanf("%s",s->sname);
+    printf("\n请输入该学院的人数:");
+    scanf("%s",s->head);
+    printf("\n请输入该学院的地点:");
+    scanf("%s",s->spot);
+    printf("\n请输入该学院的办公电话:");
+    scanf("%s",s->phone);
+ptr=head;
+head=s;//将新结点插入队头
+s->next=ptr;
+fflush(stdin);
+printf("\n请问是否继续注册?(Y/N)");
+scanf("%c",&ch);
+}while(ch=='Y'||ch=='y');
+return;
+}
+void ElePrint(char str[])  //输出单个元素
+{
+if(str==NULL) exit(0);
+printf("%s",str);
+for(unsigned int i=0;i<12-strlen(str);i++) printf(" ");//为了对齐输出，需插入一些空格
+return;
+}
+int LinePrint(school *ptr) //输出一行
+{
+if(ptr==NULL)  //检查传进来的指针
+return 0;
+printf("\n");
+ElePrint(ptr->sno);
+ElePrint(ptr->sname);
+ElePrint(ptr->head);
+ElePrint(ptr->spot);
+ElePrint(ptr->phone);
+return 1;
+}
+
+####2.显示函数：实现的是显示目前所有的有效学院的记录信息。
+
+void print()  //输出全部学院信息
+{
+school *ptr=head;
+printf("\n学院号        名称        人数        地点        办公电话          ");
+while(ptr)
+{
+LinePrint(ptr);
+ptr=ptr->next;
+}
+printf("\n");
+return;
+}
+
+####3.查询函数:允许按照学院号，学院名称，学院地点，学院人数，学院办公电话对学院的各项信息进行查询。
+
+void search()//查询模块
+{
+int method;//查询方式
+char no[max],name[max],phonem[max],heads[max],spots[max]; //用来接收查询关键字
+while(1)
+{
+printf("\n请选择查询方式");
+    printf("\n1.按学院号查询");
+    printf("\n2.按名称查询");
+    printf("\n3.按办公电话查询");
+    printf("\n4.按人数查询");
+    printf("\n5.按地点查询");
+    printf("\n6.返回主菜单\n");
+    scanf("%d",&method);
+    school *p=head,*temp;
+    switch(method)
+{
+       case 1:
+   printf("\n请输入要查询的学院号:");
+   scanf("%s",no);
+   while(p)
+   {
+   if(!strcmp(p->sno,no))
+   break;
+   else
+   {
+   temp=p;
+   p=p->next;
+   }
+   }
+   printf("\n学院号        名称        人数        地点        办公电话         ");
+   LinePrint(p);
+   break;
+   case 2:
+   printf("\n请输入要查询的名称:");
+   scanf("%s",name);
+   printf("\n学院号        名称        人数        地点        办公电话         ");
+   while(p)
+   {
+   if(!strcmp(p->sname,name))
+   LinePrint(p);
+   p=p->next;
+   }
+   break;
+   case 3:
+   printf("\n请输入学院所在的办公电话:");
+   scanf("%s",phonem);
+   printf("\n学院号        名称        人数        地点        办公电话         ");
+   while(p)
+   {
+   if(!strcmp(p->phone,phonem))
+   LinePrint(p);
+   p=p->next;
+   }
+   break;
+   case 4:
+   printf("\n请输入学院所在的人数:");
+   scanf("%s",heads);
+   printf("\n学院号        名称        人数        地点        办公电话         ");
+   while(p)
+   {
+   if(!strcmp(p->head,heads))
+   LinePrint(p);
+   p=p->next;
+   }
+   break;
+
+   case 5:
+   printf("\n请输入学院所在的地点:");
+   scanf("%s",spots);
+   printf("\n学院号        名称        人数        地点        办公电话         ");
+   while(p)
+   {
+   if(!strcmp(p->spot,spots))
+   LinePrint(p);
+   p=p->next;
+   }
+   break;
+
+   case 6:
+   return;
+   default:
+   printf("很抱歉，暂无此查询方式!");
+   break;
+}
+}
+}
+
+####4.删除函数:实现的是按指定的信息删除学院数据。
+
+void del()// 删除某学院的信息
+{
+school *p=head,*temp=head,*s;
+char num1[max];
+printf("\n请输入要删除的学院的学院号:");
+scanf("%s",num1);
+while(p)//查找该学院所在的结点
+{
+if(!strcmp(p->sno,num1))
+break;
+else
+{
+temp=p;
+p=p->next;
+}
+}//while
+if(!p)
+{
+printf("\n不存在此学院的信息.");
+return;
+}
+LinePrint(p);//输出该学院的信息
+printf("\n请问真的要删除该学院的信息吗?(Y/N)");
+char ch;
+fflush(stdin);
+scanf("%c",&ch);
+if(ch=='Y'||ch=='y')
+{
+s=p->next;
+temp->next=s;
+free(p);
+printf("\n已经删除该学院的信息.");
+}
+return;
+}
+
+####5.修改函数:实现的是按指定的信息对学院数据进行修改。
+
+void modify()//修改学院信息
+{
+char num[max];
+school *p=head;
+printf("\n请输入要修改的学院的学院号:");
+scanf("%s",num);
+printf("\n学院号        名称        人数        地点        办公电话         ");
+while(p)
+{
+if(!strcmp(p->sno,num))
+break;
+else
+p=p->next;
+}
+if(p==NULL)
+{
+printf("\n错误：没有此学院的信息!\n");
+return;
+}
+LinePrint(p);
+printf("\n请输入要修改的该学院的信息:");
+printf("\n1.学院号");
+printf("\n2.名称");
+printf("\n3.地点");
+printf("\n4.人数");
+printf("\n5.办公电话\n");
+char number[max],name1[max],spot1[max],head1[max],phone1[max];
+int select;
+fflush(stdin);
+scanf("%d",&select);
+printf("\n请输入新的信息:");
+switch(select)
+{
+case 1:
+scanf("%s",number);
+strcpy(p->sno,number);
+break;
+case 2:
+scanf("%s",name1);
+strcpy(p->sname,name1);
+break;
+case 3:
+scanf("%s",spot1);
+strcpy(p->spot,spot1);
+break;
+case 4:
+scanf("%s",head1);
+strcpy(p->head,head1);
+break;
+case 5:
+scanf("%s",phone1);
+strcpy(p->phone,phone1);
+break;
+default:
+printf("\nError!");
+break;
+}
+printf("\n学院号        名称        人数        地点        办公电话         ");
+LinePrint(p);
+return;
+}
+
+软件17-2 邓鹏飞 1714010205
+
+2018年10月7日
